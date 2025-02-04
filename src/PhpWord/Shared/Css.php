@@ -53,7 +53,7 @@ class Css
                     continue;
                 }
                 [$key, $value] = explode(':', trim($rule));
-                $this->styles[$this->sanitize($selector)][$this->sanitize($key)] = $this->sanitize($value);
+                $this->styles[$this->sanitize($selector)][$this->sanitize($key)] = $value !== null ? $this->sanitize($value) : "";
             }
         }
     }
