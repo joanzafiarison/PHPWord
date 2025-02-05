@@ -202,7 +202,7 @@ class Html
         }
 
         // Populate styles array
-        $styleTypes = ['font', 'paragraph', 'list', 'table', 'row', 'cell'];
+        $styleTypes = ['font', 'paragraph', 'div', 'list', 'table', 'row', 'cell'];
         foreach ($styleTypes as $styleType) {
             if (!isset($styles[$styleType])) {
                 $styles[$styleType] = [];
@@ -213,6 +213,7 @@ class Html
         $nodes = [
             // $method               $node   $element    $styles     $data   $argument1      $argument2
             'p' => ['Paragraph',     $node,  $element,   $styles,    null,   null,           null],
+            'div' => ['Div',     $node,  $element,   $styles,    null,   null,           null],
             'h1' => ['Heading',      $node,  $element,   $styles,    null,   'Heading1',     null],
             'h2' => ['Heading',      $node,  $element,   $styles,    null,   'Heading2',     null],
             'h3' => ['Heading',      $node,  $element,   $styles,    null,   'Heading3',     null],
@@ -289,9 +290,12 @@ class Html
     {
         if ('li' != $node->nodeName) {
             $cNodes = $node->childNodes;
+            //DomElement
             if (!empty($cNodes)) {
+                //cNode DOMNodeList | $element PhpWordElement
                 foreach ($cNodes as $cNode) {
                     if ($element instanceof AbstractContainer || $element instanceof Table || $element instanceof Row) {
+                        
                         self::parseNode($cNode, $element, $styles, $data);
                     }
                 }
@@ -318,6 +322,20 @@ class Html
         return $element->addTextRun($styles['paragraph']);
     }
 
+    /**
+     * Parse Div node
+     * 
+     * @param DOMNode $node
+     * @param AbstractContainer $element
+     * @param array &$styles
+     * 
+     * @return \PhpOffice\PhpWord\Element\TextBox
+     */
+    protected static function parseDiv($node, $element, &$styles){
+
+        $styles['div'] = self::recursiveParseStylesInHierarchy($node, $styles['div']);
+        return $element->addTextBox($styles["div"]);
+    }
     
 
 

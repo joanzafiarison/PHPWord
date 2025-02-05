@@ -1406,7 +1406,7 @@ HTML;
         $section = $phpWord->addSection();
         $html = <<<HTML
             <p>textbox</p>
-            <div>
+            <div style="background-color: #FF0000;">
                 <p>Text box content in section.</p>
                 <p>Another line.</p>
             </div>
