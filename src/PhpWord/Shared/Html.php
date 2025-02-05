@@ -258,6 +258,7 @@ class Html
                     $arguments[$keys[$i]] = &$args[$i];
                 }
             }
+            
             $method = "parse{$method}";
             $newElement = call_user_func_array(['PhpOffice\PhpWord\Shared\Html', $method], array_values($arguments));
 
@@ -272,7 +273,7 @@ class Html
         if ($newElement === null) {
             $newElement = $element;
         }
-
+        
         static::parseChildNodes($node, $newElement, $styles, $data);
     }
 
@@ -316,6 +317,9 @@ class Html
 
         return $element->addTextRun($styles['paragraph']);
     }
+
+    
+
 
     /**
      * Parse input node.

@@ -70,6 +70,7 @@ class TextBox extends Image
         $xmlWriter->endElement(); // v:shape
         $xmlWriter->endElement(); // w:pict
         $xmlWriter->endElement(); // w:r
+        
 
         $this->endElementP();
     }

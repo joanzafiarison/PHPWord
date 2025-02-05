@@ -1369,6 +1369,60 @@ HTML;
         ];
     }
 
+    public function testParseTextBoxMixed()
+    {
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+        $html = <<<HTML
+            <p>textbox</p>
+        HTML;
+        $textbox = $section->addTextBox(
+            array(
+                'align'       => 'center',
+                'width'       => 400,
+                'height'      => 150,
+                'borderSize'  => 1,
+                'borderColor' => '#FF0000',
+            )
+        );
+        $textbox->addText(htmlspecialchars('Text box content in section.'));
+        $textbox->addText(htmlspecialchars('Another line.'));
+        
+        //print_r($textbox);
+
+        Html::addHtml($section, $html, false, false);
+        //XmlDocument
+        $doc = TestHelperDOCX::getDocument($phpWord, 'Word2007');
+
+        $xpath = '/w:document/w:body/w:p/w:r/w:pict/v:shape/v:textbox/w:txbxContent';
+        //$xpath_2 = '/w:document/w:body/w:p/w:pPr/w:jc';
+        self::assertTrue($doc->elementExists($xpath));
+        self::assertEquals('Text box content in section. Another line.', $doc->getElement($xpath)->nodeValue);
+    }
+
+    public function testParseTextBox()
+    {
+        $phpWord = new PhpWord();
+        $section = $phpWord->addSection();
+        $html = <<<HTML
+            <p>textbox</p>
+            <div>
+                <p>Text box content in section.</p>
+                <p>Another line.</p>
+            </div>
+        HTML;
+        
+        //print_r($textbox);
+
+        Html::addHtml($section, $html, false, false);
+        //XmlDocument
+        $doc = TestHelperDOCX::getDocument($phpWord, 'Word2007');
+
+        $xpath = '/w:document/w:body/w:p/w:r/w:pict/v:shape/v:textbox/w:txbxContent';
+        //$xpath_2 = '/w:document/w:body/w:p/w:pPr/w:jc';
+        self::assertTrue($doc->elementExists($xpath));
+        self::assertEquals('Text box content in section. Another line.', $doc->getElement($xpath)->nodeValue);
+    }
     /**
      * Test ruby.
      */
